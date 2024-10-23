@@ -15,19 +15,13 @@ jobs:
         with:
           ref: master
 
-      - name: Setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "10.x"
-
-      - name: Build project
-        run: yarn && yarn build
-
       - name: Upload COS
-        uses: zkqiang/tencent-cos-action@v0.1.0
+        uses: TencentCloud/cos-action@v1
         with:
-          args: delete -r -f / && upload -r ./ /
-          secret_id: ${{ secrets.SECRET_ID }}
-          secret_key: ${{ secrets.SECRET_KEY }}
-          bucket: ${{ secrets.BUCKET }}
-          region: ap-shanghai
+          secret_id: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+          secret_key: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+          cos_bucket: ${{ secrets.COS_BUCKET }}
+          cos_region: ${{ secrets.COS_REGION }}
+          local_path: /
+          remote_path: /
+          clean: true
