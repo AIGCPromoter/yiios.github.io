@@ -25,3 +25,17 @@ jobs:
           local_path: ${{ github.workspace }}
           remote_path: ''
           clean: true
+
+      - name: 安装腾讯云依赖
+        run: |
+          sudo pip install tccli
+
+      - name: 配置腾讯云依赖
+        run: |
+          tccli configure set secretId ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+          tccli configure set secretKey ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+          tccli configure set region ${{ secrets.COS_REGION }}
+
+      - name: 刷新CDN
+        run: |
+          tccli cdn PurgePathCache --cli-unfold-argument --Paths https://www.yiios.com/ --FlushType flush
